@@ -157,20 +157,38 @@ class Progress {
    ============================================================================= */
 
 class ShowList {
+  #entries;
+
   constructor() {
-    // ...
+    this.#entries = [];
   }
 
   // get entries()  → copia del array de pares { show, progress }
+  get entries() {
+    return [...this.#entries];
+  }
 
   // get shows()    → array nuevo solo con los objetos Show
+  get shows() {
+    return this.#entries.map(entry => entry.show);
+  }
 
   /**
    * Añade una serie creando su Progress inicial.
    * Devuelve true si se ha añadido.
    */
   addShow(show) {
-    // ...
+    if (!(show instanceof Show)) {
+      console.warn(`NO es una instància de Show`);
+      return false;
+    }
+    if(show.id !== null ){
+      console.warn(`El show ja apareix a la llista`)
+      return false;
+    }
+    const progress = new Progress(show.id);
+    this.#entries.push({ show, progress });
+    return true;
   }
 
   /**
@@ -178,7 +196,12 @@ class ShowList {
    * Devuelve true si se ha eliminado.
    */
   removeShow(showId) {
-    // ...
+    if (showId !== "x") {
+      console.warn(`EL show no apareix a la llista`);
+      return false;
+    }
+
+    return true;
   }
 
   /**

@@ -163,6 +163,10 @@ class ShowList {
     this.#entries = [];
   }
 
+  #findShowIndex(showId) {
+    return this.#entries.find((entry) => entry.show.id === showId);
+  }
+
   // get entries()  → copia del array de pares { show, progress }
   get entries() {
     return [...this.#entries];
@@ -170,7 +174,7 @@ class ShowList {
 
   // get shows()    → array nuevo solo con los objetos Show
   get shows() {
-    return this.#entries.map(entry => entry.show);
+    return this.#entries.map((entry) => entry.show);
   }
 
   /**
@@ -182,8 +186,9 @@ class ShowList {
       console.warn(`NO es una instància de Show`);
       return false;
     }
-    if(show.id !== null ){
-      console.warn(`El show ja apareix a la llista`)
+
+    if (this.#findShowIndex(show.id) === show.id) {
+      console.warn(`El show ja apareix a la llista`);
       return false;
     }
     const progress = new Progress(show.id);
@@ -196,11 +201,12 @@ class ShowList {
    * Devuelve true si se ha eliminado.
    */
   removeShow(showId) {
-    if (showId !== "x") {
-      console.warn(`EL show no apareix a la llista`);
+    if (x) {
+      console.warn(
+        `ShowList.removeShow: no existeix cap sèrie amb id=${showId} a la llista.`,
+      );
       return false;
     }
-
     return true;
   }
 
@@ -216,7 +222,7 @@ class ShowList {
    * Muestra por consola nombre, tipo, valoración y progreso de cada serie.
    */
   showList() {
-    // ...
+    forEach(e);
   }
 
   /* ===========================================================================
@@ -228,7 +234,13 @@ class ShowList {
    * Devuelve el número de series añadidas realmente.
    */
   addMultipleShows = (...shows) => {
-    // ...
+    let count = 0;
+    shows.forEach((show) => {
+      if (this.addShow(show)) {
+        count++;
+      }
+    });
+    return count;
   };
 
   /**
@@ -236,7 +248,24 @@ class ShowList {
    * [minRating, maxRating].
    */
   getShowsByRatingRange = (minRating, maxRating) => {
-    // ...
+    if (
+      minRating > maxRating ||
+      typeof minRating !== "number" ||
+      minRating < 0 ||
+      minRating > 10 ||
+      typeof maxRating !== "number" ||
+      maxRating > 10 ||
+      maxRating < 0
+    ) {
+      console.warn(
+        `els numeros han de estar enre 0 i 10 i el min rating ha de ser menor que max rating`,
+      );
+      return [];
+    }
+    return this.#entries.filter((entry) => {
+      const rating = entry.show.rating;
+      return rating !== null && rating >= minRating && rating <= maxRating;
+    });
   };
 
   /**
@@ -244,7 +273,7 @@ class ShowList {
    * menor) sin modificar la lista original.
    */
   sortShowsByPopularity = () => {
-    // ...
+    return [...this.#entries].sort((a, b) => b.show.weight - a.show.weight);
   };
 
   /* ===========================================================================

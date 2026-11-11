@@ -297,8 +297,22 @@ class ShowList {
  * 5.1 — Busca recursivamente un episodio por temporada y número.
  * Devuelve el episodio o null si no existe.
  */
-const findEpisodeByNumber = (episodes, season, number) => {
-  // ...
+const findEpisodeByNumber = (episodes, season, number, index = 0) => {
+  if (
+    !Array.isArray(episodes) ||
+    !Number.isInteger(season) ||
+    season < 1 ||
+    !Number.isInteger(number) ||
+    number < 1
+  ) {
+    return null;
+  }
+  if (index >= episodes.lenght) {
+    return null;
+  }
+  return episodes[index].season === season && episodes[index].number === number
+    ? episodes[index]
+    : findEpisodeByNumber(episodes, season, number, index + 1);
 };
 
 /* =============================================================================

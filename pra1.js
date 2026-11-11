@@ -307,7 +307,7 @@ const findEpisodeByNumber = (episodes, season, number, index = 0) => {
   ) {
     return null;
   }
-  if (index >= episodes.lenght) {
+  if (index >= episodes.length) {
     return null;
   }
   return episodes[index].season === season && episodes[index].number === number
@@ -323,7 +323,36 @@ const findEpisodeByNumber = (episodes, season, number, index = 0) => {
  * Devuelve { genre, count } con el género más frecuente del array de series.
  */
 const getMostCommonGenre = (shows) => {
-  // ...
+  if (!Array.isArray(shows) || shows.length === 0) {
+    return null;
+  }
+
+  const genreCount = shows.reduce((acc, show) => {
+    if (!Array.isArray(show.genres)) {
+      return acc;
+    }
+    show.genres.forEach((genre) => {
+      acc[genre] = (acc[genre] || 0) + 1;
+    });
+    return acc;
+  }, {});
+
+  if (Object.keys(genreCount).length === 0) {
+    return null;
+  }
+
+  return Object.entries(genreCount).reduce(
+    (best, [genre, count]) => {
+      if (count > best.count) {
+        return { genre, count };
+      }
+      if (count === best.count && genre < best.genre) {
+        return { genre, count };
+      }
+      return best;
+    },
+    { genre: null, count: 0 },
+  );
 };
 
 /* =============================================================================

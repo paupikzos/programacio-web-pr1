@@ -163,8 +163,9 @@ class ShowList {
     this.#entries = [];
   }
 
-  #findShowIndex(showId) {
-    return this.#entries.find((entry) => entry.show.id === showId);
+  #findEntry(showId) {
+    const entry = this.#entries.find((entry) => entry.show.id === showId);
+    return entry !== undefined ? entry : null;
   }
 
   // get entries()  → copia del array de pares { show, progress }
@@ -187,10 +188,11 @@ class ShowList {
       return false;
     }
 
-    if (this.#findShowIndex(show.id) === show.id) {
+    if (this.#findEntry(show.id) !== null) {
       console.warn(`El show ja apareix a la llista`);
       return false;
     }
+
     const progress = new Progress(show.id);
     this.#entries.push({ show, progress });
     return true;
@@ -201,12 +203,13 @@ class ShowList {
    * Devuelve true si se ha eliminado.
    */
   removeShow(showId) {
-    if (x) {
+    if (this.#findEntry(showId) === null) {
       console.warn(
         `ShowList.removeShow: no existeix cap sèrie amb id=${showId} a la llista.`,
       );
       return false;
     }
+    this.#entries = this.#entries.filter((entry) => entry.show.id !== showId);
     return true;
   }
 
@@ -215,14 +218,37 @@ class ShowList {
    * Devuelve true si se ha reiniciado.
    */
   resetProgress(showId) {
-    // ...
+    const resetEntry = this.#findEntry(showId);
+
+    if (resetEntry === null) {
+      console.warn(
+        `ShowList.resetProgress: no existeix cap sèrie amb id=${showId} a la llista.`,
+      );
+      return false;
+    }
+
+    resetEntry.progress.reset();
+    return true;
   }
 
   /**
    * Muestra por consola nombre, tipo, valoración y progreso de cada serie.
    */
   showList() {
-    forEach(e);
+    if (this.#entries.length === 0) {
+      console.log(`ShowList.showList: La llista està buida.`);
+      return;
+    }
+
+    this.#entries.forEach(({ show, progress }) => {
+      const progressText = progress.hasStarted
+        ? `T${progress.currentSeason}E${progress.currentEpisode}`
+        : "Sense comecar";
+      const ratingText = show.rating !== null ? show.rating : "Sense valoració";
+      console.log(
+        `${show.name}, ${show.type} - Valoració: ${ratingText} - Progrés: ${progressText}`,
+      );
+    });
   }
 
   /* ===========================================================================

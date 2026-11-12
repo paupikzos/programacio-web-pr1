@@ -61,7 +61,7 @@ class Show {
     this.summary = summary;
     this.premiered = premiered;
     this.status = status;
-    this.#rating = rating;
+    this.rating = rating;
     this.type = type;
     this.genres = genres;
     this.network = network;
@@ -78,6 +78,7 @@ class Show {
   get rating() {
     return this.#rating;
   }
+
   set rating(newRating) {
     if (
       newRating !== null &&
@@ -243,7 +244,7 @@ class ShowList {
     this.#entries.forEach(({ show, progress }) => {
       const progressText = progress.hasStarted
         ? `T${progress.currentSeason}E${progress.currentEpisode}`
-        : "Sense comecar";
+        : "Sense começar";
       const ratingText = show.rating !== null ? show.rating : "Sense valoració";
       console.log(
         `${show.name}, ${show.type} - Valoració: ${ratingText} - Progrés: ${progressText}`,
@@ -275,13 +276,13 @@ class ShowList {
    */
   getShowsByRatingRange = (minRating, maxRating) => {
     if (
-      minRating > maxRating ||
       typeof minRating !== "number" ||
       minRating < 0 ||
       minRating > 10 ||
       typeof maxRating !== "number" ||
       maxRating > 10 ||
-      maxRating < 0
+      maxRating < 0 ||
+      minRating > maxRating
     ) {
       console.warn(
         `els numeros han de estar enre 0 i 10 i el min rating ha de ser menor que max rating`,
@@ -422,7 +423,30 @@ const getMostCommonGenre = (shows) => {
  * con el campo following: true.
  */
 const getShowInfo = (show) => {
-  // ...
+  if (!(show instanceof Show)) {
+    console.warn(
+      `getShowInfo: s'esperava una instància de Show. Rebut: ${typeof show}`,
+    );
+    return null;
+  }
+  const {
+    name,
+    type = "Desconegut",
+    rating,
+    genres: [firstGenre = "Sense gènere"] = [],
+  } = show;
+
+  const { name: networkName } = show.network || {};
+  const { name: webChannelName } = show.webChannel || {};
+
+  const ratingText = rating !== null ? rating : "Sense valorar";
+  const platform = networkName || webChannelName || "Desconeguda";
+
+  console.log(
+    `Nom: ${name}, Tipus: ${type}, Valoració: ${ratingText}, Gènere principal: ${firstGenre}, Plataforma: ${platform}`,
+  );
+
+  return { ...show, rating, following: true };
 };
 
 /* =============================================================================
@@ -433,14 +457,67 @@ const getShowInfo = (show) => {
  * Días naturales que faltan desde today hasta isoDate (aaaa-mm-dd).
  */
 const daysUntil = (isoDate, today = new Date()) => {
-  // ...
+  if (typeof isoDate !== "string") {
+    console.warn(`daysUntil: isoDate ha de ser una cadena de text`);
+    return null;
+  }
+
+  const parts = isoDate.split("-");
+
+  if (parts.length !== 3) {
+    console.warn(
+      `daysUntil: EL format de la data ha de ser aaaa-mm-dd. Data introduida: ${isoDate}`,
+    );
+    return null;
+  }
+
+  if (parts[0].length !== 4 || parts[1].length !== 2 || parts[2].length !== 2) {
+    console.warn(
+      `daysUntil: Format de la data no valida. Data introduida: ${isoDate}. Data: aaaa-mm-dd`,
+    );
+    return null;
+  }
+  const [year, month, day] = parts.map(Number);
+
+  const date = new Date(year, month - 1, day);
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month - 1 ||
+    date.getDate() !== day
+  ) {
+    console.warn(`La data no existeix. Rebut: ${isoDate}`);
+    return null;
+  }
+  const todayTime = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate(),
+  );
+
+  const msPerDay = 1000 * 60 * 60 * 24;
+
+  return Math.round((date - todayTime) / msPerDay);
 };
 
 /**
  * Devuelve el siguiente episodio pendiente de una serie, o null.
  */
 const getNextPendingEpisode = (show, progress) => {
-  // ...
+  if (!(show instanceof Show) || !(progress instanceof Progress)) {
+    console.warn(
+      `getNextPendingEpisode: s'esperava un Show i un Progress. Rebut: show=${typeof show}, progress=${typeof progress}`,
+    );
+    return null;
+  }
+
+  if (progress.showId !== show.id) {
+    console.warn(
+      `getNextPendingEpisode: el progrés no pertany a la sèrie. progress.showId=${progress.showId}, show.id=${show.id}`,
+    );
+    return null;
+  }
+
+  return findNextEpisode(progress, show.episodes);
 };
 
 /* =============================================================================

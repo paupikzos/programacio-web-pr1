@@ -311,10 +311,42 @@ class ShowList {
    * Devuelve el episodio marcado como visto, o null.
    */
   markEpisodeWatched(showId) {
-    // ...
+    const entry = this.#findEntry(showId);
+
+    if (entry === null) {
+      console.warn(
+        `ShowList.markEpisodeWatched: no existeix cap sèrie amb id=${showId} a la llista.`,
+      );
+      return null;
+    }
+    const nextEpisode = findNextEpisode(entry.progress, entry.show.episodes);
+
+    if (nextEpisode === null) {
+      console.warn(
+        `ShowList.markEpisodeWatched: no hi ha més episodis pendents per a la sèrie amb id=${showId}.`,
+      );
+      return null;
+    }
+    entry.progress.advance(nextEpisode.season, nextEpisode.number);
+    return nextEpisode;
   }
 }
 
+const findNextEpisode = (progress, episodes) => {
+  if (!progress.hasStarted) {
+    return findEpisodeByNumber(episodes, 1, 1);
+  }
+
+  const sameSeason = findEpisodeByNumber(
+    episodes,
+    progress.currentSeason,
+    progress.currentEpisode + 1,
+  );
+
+  return sameSeason !== null
+    ? sameSeason
+    : findEpisodeByNumber(episodes, progress.currentSeason + 1, 1);
+};
 /* =============================================================================
    ETAPA 5 — Función recursiva (4 puntos)
    ============================================================================= */

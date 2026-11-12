@@ -529,7 +529,36 @@ const getNextPendingEpisode = (show, progress) => {
  * o plataforma concreta.
  */
 const getShowsByPlatform = (shows, platformName) => {
-  // ...
+  if (
+    !Array.isArray(shows) ||
+    typeof platformName !== "string" ||
+    platformName.trim().length === 0
+  ) {
+    console.warn(
+      `getShowsByPlatform: s'esperava un array i un nom de plataforma no buit. Rebut: shows=${typeof shows}, platformName=${platformName}`,
+    );
+    return null;
+  }
+
+  const found = shows.filter((show) => show.platform === platformName);
+
+  const showsTitle = found.map((show) => show.name);
+
+  const ratings = found
+    .map((show) => show.rating)
+    .filter((rating) => rating !== null);
+
+  const averageRating =
+    ratings.length === 0
+      ? null
+      : ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+
+  return {
+    platform: platformName,
+    count: found.length,
+    shows: showsTitle,
+    averageRating: averageRating,
+  };
 };
 
 /* =============================================================================

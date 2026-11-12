@@ -64,7 +64,6 @@ class Show {
   // get platform()
 }
 
-
 /* =============================================================================
    ETAPA 2 — Clase Progress (2 puntos)
    Progreso de visionado de un usuario en una serie concreta.
@@ -92,7 +91,6 @@ class Progress {
 
   // get hasStarted()
 }
-
 
 /* =============================================================================
    ETAPA 3 — Clase ShowList (3 puntos)
@@ -180,7 +178,6 @@ class ShowList {
   }
 }
 
-
 /* =============================================================================
    ETAPA 5 — Función recursiva (4 puntos)
    ============================================================================= */
@@ -189,11 +186,7 @@ class ShowList {
  * 5.1 — Busca recursivamente un episodio por temporada y número.
  * Devuelve el episodio o null si no existe.
  */
-const findEpisodeByNumber = (episodes, season, number) => {
-  // ...
-};
-
-
+const findEpisodeByNumber = (episodes, season, number) => {};
 /* =============================================================================
    ETAPA 6 — Uso de reduce (4 puntos)
    ============================================================================= */
@@ -204,7 +197,6 @@ const findEpisodeByNumber = (episodes, season, number) => {
 const getMostCommonGenre = (shows) => {
   // ...
 };
-
 
 /* =============================================================================
    ETAPA 7 — Destructuring y spread (3 puntos)
@@ -217,7 +209,6 @@ const getMostCommonGenre = (shows) => {
 const getShowInfo = (show) => {
   // ...
 };
-
 
 /* =============================================================================
    ETAPA 8 — Manejo de fechas (4 puntos)
@@ -249,7 +240,6 @@ const getShowsByPlatform = (shows, platformName) => {
   // ...
 };
 
-
 /* =============================================================================
    DATOS DE PRUEBA
    Datos reales de la API de TVmaze (consultados en septiembre de 2026),
@@ -265,106 +255,263 @@ const getShowsByPlatform = (shows, platformName) => {
 
 const breakingBad = new Show({
   id: 169,
-  name: 'Breaking Bad',
-  summary: 'Un profesor de química con cáncer terminal empieza a fabricar metanfetamina para asegurar el futuro de su familia.',
-  premiered: '2008-01-20',
-  status: 'Ended',
+  name: "Breaking Bad",
+  summary:
+    "Un profesor de química con cáncer terminal empieza a fabricar metanfetamina para asegurar el futuro de su familia.",
+  premiered: "2008-01-20",
+  status: "Ended",
   rating: 9.2,
-  type: 'Scripted',
-  genres: ['Drama', 'Crime', 'Thriller'],
-  network: { name: 'AMC', country: { name: 'United States', code: 'US', timezone: 'America/New_York' } },
+  type: "Scripted",
+  genres: ["Drama", "Crime", "Thriller"],
+  network: {
+    name: "AMC",
+    country: {
+      name: "United States",
+      code: "US",
+      timezone: "America/New_York",
+    },
+  },
   webChannel: null,
-  imageUrl: 'https://static.tvmaze.com/uploads/images/medium_portrait/501/1253519.jpg',
+  imageUrl:
+    "https://static.tvmaze.com/uploads/images/medium_portrait/501/1253519.jpg",
   weight: 98,
   episodes: [
-    { season: 1, number: 1, name: 'Pilot', airdate: '2008-01-20', summary: '', runtime: 60 },
-    { season: 1, number: 2, name: "Cat's in the Bag...", airdate: '2008-01-27', summary: '', runtime: 60 },
-    { season: 1, number: 3, name: "...and the Bag's in the River", airdate: '2008-02-10', summary: '', runtime: 60 },
-    { season: 2, number: 1, name: 'Seven Thirty-Seven', airdate: '2009-03-08', summary: '', runtime: 60 },
-    { season: 2, number: 2, name: 'Grilled', airdate: '2009-03-15', summary: '', runtime: 60 },
+    {
+      season: 1,
+      number: 1,
+      name: "Pilot",
+      airdate: "2008-01-20",
+      summary: "",
+      runtime: 60,
+    },
+    {
+      season: 1,
+      number: 2,
+      name: "Cat's in the Bag...",
+      airdate: "2008-01-27",
+      summary: "",
+      runtime: 60,
+    },
+    {
+      season: 1,
+      number: 3,
+      name: "...and the Bag's in the River",
+      airdate: "2008-02-10",
+      summary: "",
+      runtime: 60,
+    },
+    {
+      season: 2,
+      number: 1,
+      name: "Seven Thirty-Seven",
+      airdate: "2009-03-08",
+      summary: "",
+      runtime: 60,
+    },
+    {
+      season: 2,
+      number: 2,
+      name: "Grilled",
+      airdate: "2009-03-15",
+      summary: "",
+      runtime: 60,
+    },
   ],
 });
 
 const gameOfThrones = new Show({
   id: 82,
-  name: 'Game of Thrones',
-  summary: 'Varias familias nobles luchan por el control del Trono de Hierro de los Siete Reinos.',
-  premiered: '2011-04-17',
-  status: 'Ended',
+  name: "Game of Thrones",
+  summary:
+    "Varias familias nobles luchan por el control del Trono de Hierro de los Siete Reinos.",
+  premiered: "2011-04-17",
+  status: "Ended",
   rating: 8.9,
-  type: 'Scripted',
-  genres: ['Drama', 'Adventure', 'Fantasy'],
-  network: { name: 'HBO', country: { name: 'United States', code: 'US', timezone: 'America/New_York' } },
+  type: "Scripted",
+  genres: ["Drama", "Adventure", "Fantasy"],
+  network: {
+    name: "HBO",
+    country: {
+      name: "United States",
+      code: "US",
+      timezone: "America/New_York",
+    },
+  },
   webChannel: null,
-  imageUrl: 'https://static.tvmaze.com/uploads/images/medium_portrait/498/1245274.jpg',
+  imageUrl:
+    "https://static.tvmaze.com/uploads/images/medium_portrait/498/1245274.jpg",
   weight: 99,
   episodes: [
-    { season: 1, number: 1, name: 'Winter is Coming', airdate: '2011-04-17', summary: '', runtime: 60 },
-    { season: 1, number: 2, name: 'The Kingsroad', airdate: '2011-04-24', summary: '', runtime: 60 },
-    { season: 2, number: 1, name: 'The North Remembers', airdate: '2012-04-01', summary: '', runtime: 60 },
+    {
+      season: 1,
+      number: 1,
+      name: "Winter is Coming",
+      airdate: "2011-04-17",
+      summary: "",
+      runtime: 60,
+    },
+    {
+      season: 1,
+      number: 2,
+      name: "The Kingsroad",
+      airdate: "2011-04-24",
+      summary: "",
+      runtime: 60,
+    },
+    {
+      season: 2,
+      number: 1,
+      name: "The North Remembers",
+      airdate: "2012-04-01",
+      summary: "",
+      runtime: 60,
+    },
   ],
 });
 
 const strangerThings = new Show({
   id: 2993,
-  name: 'Stranger Things',
-  summary: 'Tras la desaparición de un niño, un pueblo descubre experimentos secretos y fuerzas sobrenaturales.',
-  premiered: '2016-07-15',
-  status: 'Ended',
+  name: "Stranger Things",
+  summary:
+    "Tras la desaparición de un niño, un pueblo descubre experimentos secretos y fuerzas sobrenaturales.",
+  premiered: "2016-07-15",
+  status: "Ended",
   rating: 8.4,
-  type: 'Scripted',
-  genres: ['Drama', 'Horror', 'Science-Fiction'],
+  type: "Scripted",
+  genres: ["Drama", "Horror", "Science-Fiction"],
   network: null,
-  webChannel: { name: 'Netflix', country: null },
-  imageUrl: 'https://static.tvmaze.com/uploads/images/medium_portrait/595/1489169.jpg',
+  webChannel: { name: "Netflix", country: null },
+  imageUrl:
+    "https://static.tvmaze.com/uploads/images/medium_portrait/595/1489169.jpg",
   weight: 99,
   episodes: [
-    { season: 1, number: 1, name: 'Chapter One: The Vanishing of Will Byers', airdate: '2016-07-15', summary: '', runtime: 49 },
-    { season: 1, number: 2, name: 'Chapter Two: The Weirdo on Maple Street', airdate: '2016-07-15', summary: '', runtime: 56 },
-    { season: 2, number: 1, name: 'Chapter One: MADMAX', airdate: '2017-10-27', summary: '', runtime: 48 },
+    {
+      season: 1,
+      number: 1,
+      name: "Chapter One: The Vanishing of Will Byers",
+      airdate: "2016-07-15",
+      summary: "",
+      runtime: 49,
+    },
+    {
+      season: 1,
+      number: 2,
+      name: "Chapter Two: The Weirdo on Maple Street",
+      airdate: "2016-07-15",
+      summary: "",
+      runtime: 56,
+    },
+    {
+      season: 2,
+      number: 1,
+      name: "Chapter One: MADMAX",
+      airdate: "2017-10-27",
+      summary: "",
+      runtime: 48,
+    },
   ],
 });
 
 const theLastOfUs = new Show({
   id: 46562,
-  name: 'The Last of Us',
-  summary: 'Veinte años después de una pandemia, un superviviente escolta a una adolescente a través de un país devastado.',
-  premiered: '2023-01-15',
-  status: 'Running',
+  name: "The Last of Us",
+  summary:
+    "Veinte años después de una pandemia, un superviviente escolta a una adolescente a través de un país devastado.",
+  premiered: "2023-01-15",
+  status: "Running",
   rating: 7.9,
-  type: 'Scripted',
-  genres: ['Drama', 'Action', 'Horror'],
-  network: { name: 'HBO', country: { name: 'United States', code: 'US', timezone: 'America/New_York' } },
+  type: "Scripted",
+  genres: ["Drama", "Action", "Horror"],
+  network: {
+    name: "HBO",
+    country: {
+      name: "United States",
+      code: "US",
+      timezone: "America/New_York",
+    },
+  },
   webChannel: null,
-  imageUrl: 'https://static.tvmaze.com/uploads/images/medium_portrait/563/1409008.jpg',
+  imageUrl:
+    "https://static.tvmaze.com/uploads/images/medium_portrait/563/1409008.jpg",
   weight: 97,
   episodes: [
-    { season: 1, number: 1, name: 'When You\'re Lost in the Darkness', airdate: '2023-01-15', summary: '', runtime: 85 },
-    { season: 1, number: 2, name: 'Infected', airdate: '2023-01-22', summary: '', runtime: 56 },
-    { season: 2, number: 1, name: 'Future Days', airdate: '2025-04-13', summary: '', runtime: 62 },
+    {
+      season: 1,
+      number: 1,
+      name: "When You're Lost in the Darkness",
+      airdate: "2023-01-15",
+      summary: "",
+      runtime: 85,
+    },
+    {
+      season: 1,
+      number: 2,
+      name: "Infected",
+      airdate: "2023-01-22",
+      summary: "",
+      runtime: 56,
+    },
+    {
+      season: 2,
+      number: 1,
+      name: "Future Days",
+      airdate: "2025-04-13",
+      summary: "",
+      runtime: 62,
+    },
     // Ficticio: episodio anunciado pero sin fecha de emisión conocida.
     // (En la API, un episodio sin fecha llega con airdate ""; aquí usamos null.)
-    { season: 3, number: 1, name: 'TBA', airdate: null, summary: '', runtime: null },
+    {
+      season: 3,
+      number: 1,
+      name: "TBA",
+      airdate: null,
+      summary: "",
+      runtime: null,
+    },
   ],
 });
 
 const severance = new Show({
   id: 44933,
-  name: 'Severance',
-  summary: 'Los empleados de una empresa se someten a un procedimiento que separa sus recuerdos del trabajo y de su vida personal.',
-  premiered: '2022-02-18',
-  status: 'Running',
+  name: "Severance",
+  summary:
+    "Los empleados de una empresa se someten a un procedimiento que separa sus recuerdos del trabajo y de su vida personal.",
+  premiered: "2022-02-18",
+  status: "Running",
   rating: 7.7,
-  type: 'Scripted',
-  genres: ['Drama', 'Science-Fiction', 'Mystery'],
+  type: "Scripted",
+  genres: ["Drama", "Science-Fiction", "Mystery"],
   network: null,
-  webChannel: { name: 'Apple TV', country: null },
-  imageUrl: 'https://static.tvmaze.com/uploads/images/medium_portrait/548/1371406.jpg',
+  webChannel: { name: "Apple TV", country: null },
+  imageUrl:
+    "https://static.tvmaze.com/uploads/images/medium_portrait/548/1371406.jpg",
   weight: 96,
   episodes: [
-    { season: 1, number: 1, name: 'Good News About Hell', airdate: '2022-02-18', summary: '', runtime: 57 },
-    { season: 1, number: 2, name: 'Half Loop', airdate: '2022-02-18', summary: '', runtime: 53 },
-    { season: 2, number: 1, name: 'Hello, Ms. Cobel', airdate: '2025-01-17', summary: '', runtime: 48 },
+    {
+      season: 1,
+      number: 1,
+      name: "Good News About Hell",
+      airdate: "2022-02-18",
+      summary: "",
+      runtime: 57,
+    },
+    {
+      season: 1,
+      number: 2,
+      name: "Half Loop",
+      airdate: "2022-02-18",
+      summary: "",
+      runtime: 53,
+    },
+    {
+      season: 2,
+      number: 1,
+      name: "Hello, Ms. Cobel",
+      airdate: "2025-01-17",
+      summary: "",
+      runtime: 48,
+    },
   ],
 });
 
@@ -372,27 +519,40 @@ const severance = new Show({
 // sin cadena ni plataforma y con episodios que se emitirán en el futuro.
 const proyectoAurora = new Show({
   id: 90001,
-  name: 'Proyecto Aurora',
-  summary: 'Serie ficticia para las pruebas de la práctica.',
-  premiered: '2026-11-20',
-  status: 'To Be Determined',
+  name: "Proyecto Aurora",
+  summary: "Serie ficticia para las pruebas de la práctica.",
+  premiered: "2026-11-20",
+  status: "To Be Determined",
   rating: null,
-  type: 'Documentary',
+  type: "Documentary",
   genres: [],
   network: null,
   webChannel: null,
-  imageUrl: '',
+  imageUrl: "",
   weight: 40,
   episodes: [
-    { season: 1, number: 1, name: 'Episodio 1', airdate: '2026-11-20', summary: '', runtime: 45 },
-    { season: 1, number: 2, name: 'Episodio 2', airdate: '2026-11-27', summary: '', runtime: 45 },
+    {
+      season: 1,
+      number: 1,
+      name: "Episodio 1",
+      airdate: "2026-11-20",
+      summary: "",
+      runtime: 45,
+    },
+    {
+      season: 1,
+      number: 2,
+      name: "Episodio 2",
+      airdate: "2026-11-27",
+      summary: "",
+      runtime: 45,
+    },
   ],
 });
 
 // Fecha fija para que los resultados de las pruebas de fechas no dependan del
 // día en que se ejecuten: 13 de noviembre de 2026 en hora local.
 const TODAY = new Date(2026, 10, 13);
-
 
 /* =============================================================================
    PRUEBAS

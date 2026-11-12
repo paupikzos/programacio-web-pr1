@@ -882,4 +882,103 @@ const TODAY = new Date(2026, 10, 13);
    los casos límite que indica el enunciado.
    ============================================================================= */
 
-// ...
+/*
+console.log(`---- ETAPA 1 ----`);
+
+const s = new Show({ id: 1, name: "test", rating: 9 });
+console.log(s.rating);
+
+const bad = new Show({ id: 2, name: "test2", rating: "no rating" });
+console.log(bad.rating);
+
+s.rating = 10;
+console.log(s.rating);
+
+s.rating = -4;
+console.log(s.rating);
+
+s.rating = null;
+console.log(s.rating);
+
+console.log(strangerThings.platform);
+console.log(breakingBad.platform);
+console.log(proyectoAurora.platform);
+
+console.log(`---- ETAPA 2 ----`);
+
+const p = new Progress(1);
+console.log(p.showId, p.currentSeason, p.currentEpisode);
+console.log(p.hasStarted);
+
+console.log(p.advance(2,5));
+console.log(p.showId, p.currentSeason, p.currentEpisode);
+console.log(p.hasStarted);
+
+console.log(p.advance(1.5, 2));   
+console.log(p.advance("2", 5));    
+console.log(p.advance(null, 1));   
+console.log(p.advance(NaN, 1));    
+console.log(p.advance(undefined, 1));
+console.log(p.currentSeason, p.currentEpisode);
+
+p.reset();
+console.log(p.currentSeason, p.currentEpisode);
+console.log(p.hasStarted);
+
+console.log(p.advance(1,1))
+console.log(p.hasStarted);
+
+*/
+console.log(`---- ETAPA 3 ----`);
+const list = new ShowList();
+
+// llista vuida
+list.showList();
+
+// addShow
+console.log(list.addShow(breakingBad));
+console.log(list.addShow(theLastOfUs));
+console.log(list.addShow(severance));
+console.log(list.addShow(severance));
+console.log(list.addShow({ id: 5 }));
+console.log(list.addShow(null));
+console.log(list.shows.length);
+
+// comprovem el progrès
+console.log(list.entries[0].progress.showId);
+console.log(list.entries[0].progress.hasStarted);
+
+//no modifica la llista
+list.entries.push("x");
+list.shows.pop();
+console.log(list.entries.length);
+console.log(list.shows.length);
+
+// ShowList amb progrès
+list.entries[0].progress.advance(2, 5);
+list.showList();
+
+// resetProgress
+console.log(list.resetProgress(169));
+console.log(list.entries[0].progress.currentSeason);
+console.log(list.resetProgress(2294943));
+
+// removeShow
+console.log(list.removeShow(44933));
+console.log(list.shows.length);
+console.log(list.removeShow(44933));
+list.showList();
+
+/*
+console.log(`---- ETAPA 4 ----`);
+
+console.log(`---- ETAPA 5 ----`);
+
+console.log(`---- ETAPA 6 ----`);
+
+console.log(`---- ETAPA 7 ----`);
+
+console.log(`---- ETAPA 8 ----`);
+
+console.log(`---- ETAPA 9 ----`);
+*/

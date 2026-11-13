@@ -85,7 +85,7 @@ class Show {
       (typeof newRating !== "number" || newRating < 0 || newRating > 10)
     ) {
       console.warn(
-        `Rating ha de ser null o major a 0 i menor a 10. Número: ${newRating}`,
+        `Show.rating: Rating ha de ser null o major a 0 i menor a 10. Número: ${newRating}`,
       );
       return;
     }
@@ -185,12 +185,12 @@ class ShowList {
    */
   addShow(show) {
     if (!(show instanceof Show)) {
-      console.warn(`NO es una instància de Show`);
+      console.warn(`ShowList.addshow: ${show} no ès una instància de Show`);
       return false;
     }
 
     if (this.#findEntry(show.id) !== null) {
-      console.warn(`El show ja apareix a la llista`);
+      console.warn(`ShowList.addShow: ${show} ja apareix a la llista`);
       return false;
     }
 
@@ -285,7 +285,7 @@ class ShowList {
       minRating > maxRating
     ) {
       console.warn(
-        `els numeros han de estar enre 0 i 10 i el min rating ha de ser menor que max rating`,
+        `ShowList.getShowsByRating: Els numeros han de estar enre 0 i 10 i el min rating ha de ser menor que max rating Rebut: ${minRating}, ${maxRating}`,
       );
       return [];
     }
@@ -458,7 +458,9 @@ const getShowInfo = (show) => {
  */
 const daysUntil = (isoDate, today = new Date()) => {
   if (typeof isoDate !== "string") {
-    console.warn(`daysUntil: isoDate ha de ser una cadena de text`);
+    console.warn(
+      `daysUntil: isoDate ha de ser una cadena de text. Rebut: ${isoDate}`,
+    );
     return null;
   }
 
@@ -485,7 +487,7 @@ const daysUntil = (isoDate, today = new Date()) => {
     date.getMonth() !== month - 1 ||
     date.getDate() !== day
   ) {
-    console.warn(`La data no existeix. Rebut: ${isoDate}`);
+    console.warn(`daysUntil: La data no existeix. Rebut: ${isoDate}`);
     return null;
   }
   const todayTime = new Date(

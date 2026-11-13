@@ -71,10 +71,6 @@ class Show {
     this.episodes = episodes;
   }
 
-  // ── Getters y setters ────────────────────────────────────────────────────
-
-  // get rating() / set rating(newRating)
-
   get rating() {
     return this.#rating;
   }
@@ -91,8 +87,6 @@ class Show {
     }
     this.#rating = newRating;
   }
-
-  // get platform()
 
   get platform() {
     if (this.network && this.network.name) {
@@ -111,6 +105,7 @@ class Show {
    ============================================================================= */
 
 class Progress {
+  //  0 / 0  vol dir "sense començar", encara no s'ha vist cap episodi
   constructor(showId, currentSeason = 0, currentEpisode = 0) {
     this.showId = showId;
     this.currentSeason = currentSeason;
@@ -118,8 +113,9 @@ class Progress {
   }
 
   /**
-   * Marca como último visto el episodio indicado.
-   * Devuelve true si se ha actualizado el progreso.
+   * marca com a últim vist l'episodi indicat.
+   * retorna true si s'ha actualitzat el progrés.
+   * només accepta nombres positius, 0 queda exclòs
    */
   advance(season, number) {
     if (
@@ -139,14 +135,13 @@ class Progress {
   }
 
   /**
-   * Vuelve el progreso a 0 / 0 (sin empezar).
+   * torna el progrés a 0 / 0
    */
   reset() {
     this.currentSeason = 0;
     this.currentEpisode = 0;
   }
 
-  // get hasStarted()
   get hasStarted() {
     return this.currentEpisode > 0;
   }
@@ -158,30 +153,39 @@ class Progress {
    ============================================================================= */
 
 class ShowList {
+  /**
+   * cada element és una parella {show, progress}, cada serie porta el seu progrés associat.
+   * és privat perquè només es pot modificat  amb addShow o removeShow
+   */
   #entries;
 
   constructor() {
     this.#entries = [];
   }
 
+  /**
+   * retorna la parella amb el mateix id o null si no exiteix
+   * és privat perquè retorna la parella  real
+   */
   #findEntry(showId) {
     const entry = this.#entries.find((entry) => entry.show.id === showId);
     return entry !== undefined ? entry : null;
   }
 
-  // get entries()  → copia del array de pares { show, progress }
+  // get entries()  → copia de l'array de parells { show, progress }
+  // és una copia  perquè no es pugui modificar externament
   get entries() {
     return [...this.#entries];
   }
 
-  // get shows()    → array nuevo solo con los objetos Show
+  // get shows()    → array nou sol amb els objectes Show
   get shows() {
     return this.#entries.map((entry) => entry.show);
   }
 
   /**
-   * Añade una serie creando su Progress inicial.
-   * Devuelve true si se ha añadido.
+   * afegeix la sèrie i crea el seu Progress 0 / 0
+   * retorna true si s'ha afegit
    */
   addShow(show) {
     if (!(show instanceof Show)) {
@@ -200,8 +204,8 @@ class ShowList {
   }
 
   /**
-   * Elimina una serie (y su progreso) por su id.
-   * Devuelve true si se ha eliminado.
+   * elimina la parella sencera, així el progrés desapareix amb la sèrie.
+   * retorna true si s'ha eliminat.
    */
   removeShow(showId) {
     if (this.#findEntry(showId) === null) {
@@ -210,13 +214,14 @@ class ShowList {
       );
       return false;
     }
+    // filter crea un array nou, per això cal tornar-lo a assignar a #entries.
     this.#entries = this.#entries.filter((entry) => entry.show.id !== showId);
     return true;
   }
 
   /**
-   * Reinicia el progreso de una serie de la lista.
-   * Devuelve true si se ha reiniciado.
+   * reinicia el progrés d'una sèrie de la llista.
+   * retorna true si s'ha reiniciat.
    */
   resetProgress(showId) {
     const resetEntry = this.#findEntry(showId);
@@ -233,8 +238,10 @@ class ShowList {
   }
 
   /**
-   * Muestra por consola nombre, tipo, valoración y progreso de cada serie.
+   * mostra una línia per sèrie. Una llista buida no és un error: només
+   * s'informa amb console.log, no amb warn.
    */
+
   showList() {
     if (this.#entries.length === 0) {
       console.log(`ShowList.showList: La llista està buida.`);
@@ -242,6 +249,7 @@ class ShowList {
     }
 
     this.#entries.forEach(({ show, progress }) => {
+      // Format T2E5 si ha començat; si no, "Sense començar"
       const progressText = progress.hasStarted
         ? `T${progress.currentSeason}E${progress.currentEpisode}`
         : "Sense começar";
@@ -257,8 +265,8 @@ class ShowList {
      =========================================================================== */
 
   /**
-   * Añade varias series a la vez (operador rest).
-   * Devuelve el número de series añadidas realmente.
+   * afegeix més d'una serie a la vegada
+   * retorna el número de series afegides realment
    */
   addMultipleShows = (...shows) => {
     let count = 0;
@@ -271,8 +279,9 @@ class ShowList {
   };
 
   /**
-   * Devuelve los pares { show, progress } con rating dentro del rango
+   * retorna els parells { show, progress } amb rating dins el rang.
    * [minRating, maxRating].
+   * Retorna les parelles amb rating dins de [minRating, maxRating], extrems inclosos.
    */
   getShowsByRatingRange = (minRating, maxRating) => {
     if (
@@ -290,14 +299,15 @@ class ShowList {
       return [];
     }
     return this.#entries.filter((entry) => {
+      // el null s'ha de descartar a mà.
       const rating = entry.show.rating;
       return rating !== null && rating >= minRating && rating <= maxRating;
     });
   };
 
   /**
-   * Devuelve los pares { show, progress } ordenados por weight (de mayor a
-   * menor) sin modificar la lista original.
+   * sort modifica l'array sobre el qual s'aplica, per això s'ordena una còpia: la llista interna ha de quedar intacta.
+   * b - a ordena de més a menys popular.
    */
   sortShowsByPopularity = () => {
     return [...this.#entries].sort((a, b) => b.show.weight - a.show.weight);
@@ -334,16 +344,20 @@ class ShowList {
 }
 
 const findNextEpisode = (progress, episodes) => {
+  //  sense començar, el pròxim és T1E1.
   if (!progress.hasStarted) {
     return findEpisodeByNumber(episodes, 1, 1);
   }
 
+  //  següent episodi de la mateixa temporada.
   const sameSeason = findEpisodeByNumber(
     episodes,
     progress.currentSeason,
     progress.currentEpisode + 1,
   );
 
+  //  si no existeix, primer episodi de la temporada següent.
+  //  si tampoc, findEpisodeByNumber retorna null (sèrie acabada).
   return sameSeason !== null
     ? sameSeason
     : findEpisodeByNumber(episodes, progress.currentSeason + 1, 1);
@@ -353,8 +367,8 @@ const findNextEpisode = (progress, episodes) => {
    ============================================================================= */
 
 /**
- * 5.1 — Busca recursivamente un episodio por temporada y número.
- * Devuelve el episodio o null si no existe.
+ * 5.1 - Busca recursivament un episodi per temporada y número.
+ * retorna l'episodi o null si no existeix.
  */
 const findEpisodeByNumber = (episodes, season, number, index = 0) => {
   if (
@@ -379,13 +393,15 @@ const findEpisodeByNumber = (episodes, season, number, index = 0) => {
    ============================================================================= */
 
 /**
- * Devuelve { genre, count } con el género más frecuente del array de series.
+ * retorna { genre, count } amb el gènere més freqüent amb l'array de series.
  */
 const getMostCommonGenre = (shows) => {
   if (!Array.isArray(shows) || shows.length === 0) {
     return null;
   }
 
+  //  objecte comptador del tipus { Drama: 4, Comedy: 2 }.
+  //  cada sèrie té diversos gèneres, per això es recorre també show.genres.
   const genreCount = shows.reduce((acc, show) => {
     if (!Array.isArray(show.genres)) {
       return acc;
@@ -396,6 +412,7 @@ const getMostCommonGenre = (shows) => {
     return acc;
   }, {});
 
+  //  cap sèrie tenia gèneres (genres buit o inexistent). Sense aquesta comprovació, el segon reduce retornaria { genre: null, count: 0 } en lloc de null.
   if (Object.keys(genreCount).length === 0) {
     return null;
   }
@@ -419,8 +436,9 @@ const getMostCommonGenre = (shows) => {
    ============================================================================= */
 
 /**
- * Muestra la información principal de una serie y devuelve una copia
- * con el campo following: true.
+ * Mostra per consola la informació bàsica de la sèrie i retorna una còpia.
+ * L'original no es modifica.
+ * retorna null (amb avís) si show no és una instància de Show.
  */
 const getShowInfo = (show) => {
   if (!(show instanceof Show)) {
@@ -429,6 +447,12 @@ const getShowInfo = (show) => {
     );
     return null;
   }
+
+  /**
+   * destructuring amb renombrat i valors per defecte.
+   * genres: [firstGenre = ...] agafa el primer element de l'array; si no n'hi ha cap, s'usa "Sense gènere".
+   * El "= []" cobreix que genres siga undefined.
+   */
   const {
     name,
     type = "Desconegut",
@@ -454,7 +478,9 @@ const getShowInfo = (show) => {
    ============================================================================= */
 
 /**
- * Días naturales que faltan desde today hasta isoDate (aaaa-mm-dd).
+ * retorna els dies naturals que falten des de today fins a isoDate format (aaaa-mm-dd).
+ * retorna null (amb avís) si el format no és vàlid o la data no existeix.
+ * today és un paràmetre perquè les proves no depenguen del dia d'execució.
  */
 const daysUntil = (isoDate, today = new Date()) => {
   if (typeof isoDate !== "string") {
@@ -473,15 +499,24 @@ const daysUntil = (isoDate, today = new Date()) => {
     return null;
   }
 
+  //   força aaaa-mm-dd: longituds 4, 2 i 2 (rebutja "2026-1-5").
   if (parts[0].length !== 4 || parts[1].length !== 2 || parts[2].length !== 2) {
     console.warn(
       `daysUntil: Format de la data no valida. Data introduida: ${isoDate}. Data: aaaa-mm-dd`,
     );
     return null;
   }
+
   const [year, month, day] = parts.map(Number);
 
+  //  no s'usa new Date("aaaa-mm-dd"): eixe format s'interpreta com a UTC, mentre que new Date(any, mes, dia) és hora local.
+  //  el mes es resta 1 perquè en Date van de 0 (gener) a 11 (desembre).
+
   const date = new Date(year, month - 1, day);
+
+  //  date no falla amb dates impossibles: "2026-02-30" passa al 2 de març. Si any, mes o dia han canviat, la data original no existia.
+  //  https://www.w3schools.com/js/js_dates.asp
+
   if (
     date.getFullYear() !== year ||
     date.getMonth() !== month - 1 ||
@@ -502,8 +537,9 @@ const daysUntil = (isoDate, today = new Date()) => {
 };
 
 /**
- * Devuelve el siguiente episodio pendiente de una serie, o null.
+ * retorna el següent episodi pendent d'una serie o null.
  */
+
 const getNextPendingEpisode = (show, progress) => {
   if (!(show instanceof Show) || !(progress instanceof Progress)) {
     console.warn(
@@ -527,8 +563,9 @@ const getNextPendingEpisode = (show, progress) => {
    ============================================================================= */
 
 /**
- * Devuelve { platform, count, shows, averageRating } para una cadena
- * o plataforma concreta.
+ * Retorna un resum de les sèries d'una cadena o plataforma: { platform, count, shows (títols), averageRating }.
+ * Retorna null (amb avís) si shows no és un array o platformName no és un text no buit.
+ * Una plataforma sense sèries no és un error: retorna count 0 i averageRating null.
  */
 const getShowsByPlatform = (shows, platformName) => {
   if (
@@ -546,6 +583,7 @@ const getShowsByPlatform = (shows, platformName) => {
 
   const showsTitle = found.map((show) => show.name);
 
+  //  les sèries sense valoració (null) no compten ni en la suma ni en el divisor.
   const ratings = found
     .map((show) => show.rating)
     .filter((rating) => rating !== null);

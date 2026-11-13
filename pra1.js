@@ -882,7 +882,6 @@ const TODAY = new Date(2026, 10, 13);
    los casos límite que indica el enunciado.
    ============================================================================= */
 
-/*
 console.log(`---- ETAPA 1 ----`);
 
 const s = new Show({ id: 1, name: "test", rating: 9 });
@@ -891,6 +890,7 @@ console.log(s.rating);
 const bad = new Show({ id: 2, name: "test2", rating: "no rating" });
 console.log(bad.rating);
 
+// rating
 s.rating = 10;
 console.log(s.rating);
 
@@ -910,25 +910,26 @@ const p = new Progress(1);
 console.log(p.showId, p.currentSeason, p.currentEpisode);
 console.log(p.hasStarted);
 
-console.log(p.advance(2,5));
+// advance
+console.log(p.advance(2, 5));
 console.log(p.showId, p.currentSeason, p.currentEpisode);
 console.log(p.hasStarted);
 
-console.log(p.advance(1.5, 2));   
-console.log(p.advance("2", 5));    
-console.log(p.advance(null, 1));   
-console.log(p.advance(NaN, 1));    
+console.log(p.advance(1.5, 2));
+console.log(p.advance("2", 5));
+console.log(p.advance(null, 1));
+console.log(p.advance(NaN, 1));
 console.log(p.advance(undefined, 1));
 console.log(p.currentSeason, p.currentEpisode);
 
+// reset
 p.reset();
 console.log(p.currentSeason, p.currentEpisode);
 console.log(p.hasStarted);
 
-console.log(p.advance(1,1))
+console.log(p.advance(1, 1));
 console.log(p.hasStarted);
 
-*/
 console.log(`---- ETAPA 3 ----`);
 const list = new ShowList();
 
@@ -969,16 +970,131 @@ console.log(list.shows.length);
 console.log(list.removeShow(44933));
 list.showList();
 
-/*
 console.log(`---- ETAPA 4 ----`);
+const list4 = new ShowList();
+
+// addMulitipleSHows
+
+console.log(
+  list4.addMultipleShows(
+    breakingBad,
+    gameOfThrones,
+    strangerThings,
+    theLastOfUs,
+    severance,
+    breakingBad,
+  ),
+);
+
+console.log(list4.shows.length);
+
+//getShowsByRatingRange
+const showName = (shows) => shows.map((e) => e.show.name);
+
+console.log(showName(list4.getShowsByRatingRange(5, 10)));
+console.log(showName(list4.getShowsByRatingRange(5, 9)));
+console.log(list4.getShowsByRatingRange(9.5, 10));
+
+console.log(list4.getShowsByRatingRange(5, 11));
+console.log(list4.getShowsByRatingRange(9, 1));
+console.log(list4.getShowsByRatingRange(-6, 7));
+console.log(list4.getShowsByRatingRange("a", 6));
+
+//sortShowsByPopularity
+const popularity = list4.shows.map((s) => s.name);
+console.log(showName(list4.sortShowsByPopularity()));
 
 console.log(`---- ETAPA 5 ----`);
+const breakingBadEp = breakingBad.episodes;
+
+// findEpiisodeByNumber
+console.log(findEpisodeByNumber(breakingBadEp, 1, 2).name);
+console.log(findEpisodeByNumber(breakingBadEp, 2, 2).name);
+console.log(findEpisodeByNumber(breakingBadEp, 1, 9));
+console.log(findEpisodeByNumber(breakingBadEp, -1, 1));
+console.log(findEpisodeByNumber(breakingBadEp, "a", 2));
+console.log(findEpisodeByNumber(breakingBadEp, 1, 1.1));
+
+//findNextEpisode
+console.log(findNextEpisode(new Progress(169), breakingBadEp).name);
+console.log(findNextEpisode(new Progress(169, 1, 3), breakingBadEp).name);
+console.log(findNextEpisode(new Progress(169, 2, 2), breakingBadEp));
+
+//markEpisodeWatched
+const list5 = new ShowList();
+list5.addMultipleShows(breakingBad, proyectoAurora);
+
+for (let i = 0; i < 5; i++) {
+  const ep = list5.markEpisodeWatched(169);
+  console.log(`T${ep.season}E${ep.number} ${ep.name}`);
+}
+// warn + null (acabada)
+console.log(list5.markEpisodeWatched(169));
+
+// warn + null (no existe)
+console.log(list5.markEpisodeWatched(999));
 
 console.log(`---- ETAPA 6 ----`);
+const all = [
+  breakingBad,
+  gameOfThrones,
+  strangerThings,
+  theLastOfUs,
+  severance,
+  proyectoAurora,
+];
+
+// genere amb mès presència
+console.log(getMostCommonGenre(all));
+
+// amb ShowList
+const list6 = new ShowList();
+list6.addMultipleShows(breakingBad, gameOfThrones, theLastOfUs);
+console.log(getMostCommonGenre(list6.shows));
 
 console.log(`---- ETAPA 7 ----`);
+const info = getShowInfo(breakingBad);
+
+console.log(info.rating);
+console.log(info.following);
+console.log(info.name);
+
+console.log(getShowInfo(null));
+console.log(getShowInfo("hola"));
 
 console.log(`---- ETAPA 8 ----`);
+// daysUntil
+console.log(daysUntil("2026-11-20", TODAY));
+console.log(daysUntil("2026-11-10", TODAY));
+console.log(daysUntil("2027-01-01", TODAY));
+
+console.log(daysUntil("2026-13-45", TODAY));
+console.log(daysUntil("2026-02-30", TODAY));
+
+console.log(daysUntil("abcd-ef-gh", TODAY));
+console.log(daysUntil("", TODAY));
+console.log(daysUntil(null, TODAY));
+
+// getNextPendingEpisode
+const pr = new Progress(breakingBad.id);
+console.log(getNextPendingEpisode(breakingBad, pr).name);
+pr.advance(2, 2);
+console.log(getNextPendingEpisode(breakingBad, pr));
 
 console.log(`---- ETAPA 9 ----`);
-*/
+const all9 = [
+  breakingBad,
+  gameOfThrones,
+  strangerThings,
+  theLastOfUs,
+  severance,
+  proyectoAurora,
+];
+
+console.log(getShowsByPlatform(all9, "HBO"));
+console.log(getShowsByPlatform(all9, "Netflix"));
+console.log(getShowsByPlatform(all9, "Disney+"));
+
+console.log(getShowsByPlatform("hola", "HBO"));
+console.log(getShowsByPlatform(all9, ""));
+console.log(getShowsByPlatform(all9, "   "));
